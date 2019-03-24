@@ -875,3 +875,168 @@ et dans mon menu.php
 J'ai maintenant tout le temps mes points de vie et mes points d'action d'afficher.
 
 Je viens de finir l'étape 5 et mon jeu est fonctionnel
+
+
+#Etape 6
+---
+
+__Objectif :__ Création d'un journal qui liste les différentes actions
+---
+
+Pour commencer nous allons créer l'object ```CharacterLog.php```
+
+Dedans il y aura quatre variables : id, message, add_at, character_id
+
+Une fois fait, créer la table dans votre base de données.
+
+Nous allons créer son pendant Repository :
+
+```php
+<?php
+
+class CharacterLogRepository
+{
+    private $base;
+
+    public function __construct(PDO $base)
+    {
+        $this->base = $base;
+    }
+
+    public function add(Character $character, $message)
+    {
+        $datenow = new DateTime('now');
+
+        $response = $this->base->prepare('INSERT INTO characters_log (message, add_at, character_id) VALUES(:message, :add_at, :character_id)');
+        $response->bindValue(':message', $message);
+        $response->bindValue(':add_at', $datenow->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $response->bindValue(':character_id', $character->getId());
+
+        $response->execute();
+
+    }
+
+    public function findAllForMe(int $id)
+    {
+        $response = $this->base->prepare('SELECT * FROM characters_log WHERE character_id = :id');
+        $response->bindValue(':id', $id);
+        $result = $response->execute();
+        if ($result === true) {
+            $records = $response->fetchAll(PDO::FETCH_CLASS, 'CharacterLog');
+            return $records;
+        }
+
+        return false;
+    }
+
+}
+```
+
+Nous avons deux fonctions, une pour ecrire dans le journal, l'autre pour afficher sur le journal du personnage.
+
+On va passer l'écrire du journal dans le fichier ```attaque.php```
+
+On avait déjà le message de fait, il suffira de le mettre en variable et de le passer à notre fonction ```add```
+
+```php
+            // J'enregistre les logs dans chaques journal
+            $characterLogRepository = new CharacterLogRepository($base);
+            $characterLogRepository->add($myCharacter, $message);
+            $characterLogRepository->add($enemy, $message);
+```
+
+J'enregistre dans mon journal et dans celui que j'attaque pour qu'il est une trace.
+
+Puis je créer un fichier ```journal.php``` ou je vais afficher les actions lié au personnage.
+
+```php
+<?php
+require __DIR__.'/header.php';
+
+
+if (isset($_SESSION['id'])) {
+    $characterLogRepository = new CharacterLogRepository($base);
+    if ($listOfLog = $characterLogRepository->findAllForMe($_SESSION['id'])):
+    foreach ($listOfLog as $log):?>
+        <?= $log->getAddAt();?> : <?= $log->getMessage();?><br>
+    <?php
+    endforeach;
+    endif;
+}
+
+require __DIR__.'/footer.php';
+
+?>
+```
+
+Il faudra aussi mettre une entrée dans notre menu.php pour accéder au journal du personnage.
+
+L'étape 6 est fini.
+
+#Etape 7
+---
+
+__Objectif :__ Création des soins
+---
+
+On veut commencer à diversifier notre jeu, pour ce faire nous allons implémenter le soins.
+
+Comme pour l'attaque, il faudra définir un cout dans la class Character : 
+
+```php
+    public const HEAL_COST = 2;
+```
+
+Nous allons lui donner 2, puis nous allons créer le fichier ```heal.php```, il aura pratiquement le même déroulement que ```attaque.php```
+
+```php
+<?php
+require __DIR__.'/header.php';
+
+if (isset($_SESSION['id'])) {
+    $characterRepository = new CharacterRepository($base);
+    $myCharacter = $characterRepository->find($_SESSION['id']);
+    $friend = $characterRepository->find($_GET['id']);
+
+    if ($friend->getState() === Character::DEAD) {
+        echo "Vous venez de découvrir un corps sans vie ...";
+    } else {
+        if ($myCharacter->getAp() >= Character::HEAL_COST) {
+
+            // Point d'action
+            $myCharacter->setAp($myCharacter->getAp() - Character::HEAL_COST);
+            $characterRepository->updateAp($myCharacter);
+
+            // Heal
+            $heal = rand(1,50);
+            $hp = $friend->getHp() + $heal;
+            $friend->setHp($hp);
+            $characterRepository->updateHp($friend);
+
+            $message = $myCharacter->getName() . " soigne ". $friend->getName(). " pour " . $heal ." de soins <br>";
+
+            echo $message;
+
+            // J'enregistre les logs dans chaques journal
+            $characterLogRepository = new CharacterLogRepository($base);
+            $characterLogRepository->add($myCharacter, $message);
+            $characterLogRepository->add($friend, $message);
+
+        } else {
+            echo "Vous n'avez pas assez de point d'action";
+        }
+    }
+}
+
+require __DIR__.'/footer.php';
+
+?>
+```
+
+Tout est pret, il ne reste plus qu'a donné la possiblité à l'utilisateur d'utiliser l'un ou l'autre, ça va se passer dans ```index.php```
+
+```php
+        <?= $character->getName();?> : Action disponible <a href="attaque.php?id=<?= $character->getId();?>">Attaque</a> - <a href="heal.php?id=<?= $character->getId();?>">Soin</a><br>
+```
+
+En peu de temps nous avons diversifié nos actions dans le jeu, on peut heal ou attaquer.
