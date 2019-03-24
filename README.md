@@ -23,7 +23,7 @@ Nous crérons les getter et les setter pour accéder à ces différentes variabl
 
 Votre object doit ressembler à ça :
 
-```
+```php
 <?php
 class Character
 {
