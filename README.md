@@ -789,6 +789,7 @@ Et voici notre etape 4 finalisé
 ---
 
 __Objectif :__ Regénération des points d'action
+
 ---
 
 Pour recuperer des points d'action nous allons intéragir avec des dates, et en php on manipule les dates avec l'object Datetime (<http://php.net/manual/fr/class.datetime.php>). Bonne lecture de la doc, vous en aurez besoin.
@@ -881,6 +882,7 @@ Je viens de finir l'étape 5 et mon jeu est fonctionnel
 ---
 
 __Objectif :__ Création d'un journal qui liste les différentes actions
+
 ---
 
 Pour commencer nous allons créer l'object ```CharacterLog.php```
@@ -977,6 +979,7 @@ L'étape 6 est fini.
 ---
 
 __Objectif :__ Création des soins
+
 ---
 
 On veut commencer à diversifier notre jeu, pour ce faire nous allons implémenter le soins.
@@ -1040,3 +1043,114 @@ Tout est pret, il ne reste plus qu'a donné la possiblité à l'utilisateur d'ut
 ```
 
 En peu de temps nous avons diversifié nos actions dans le jeu, on peut heal ou attaquer.
+
+#Etape 8
+---
+
+__Objectif :__ On mets en place les hp max, les ap max ainsi que du leveling
+
+---
+
+On va faire les constantes pour les max
+
+```php
+    public const HP_MAX = 100;
+
+    public const AP_MAX = 100;
+```
+
+Du coup on va faire un refactor des deux fonctions qui mette en place les HP et AP
+
+Pour les AP ça va être dans un la fonction ```getNewAp()```
+
+```php
+            if ($this->ap > self::AP_MAX) {
+                $this->ap = self::AP_MAX;
+            }
+```
+
+et pour les HP ça va être dans setHp tout simplement, on va du coup créer aussi la fonction getHpMax pour prendre en compte les levels que l'on va implémenter.
+
+```php
+    public function setHp($hp)
+    {
+        if ($hp > $this->getHpMax()) {
+            $this->hp = $this->getHpMax();
+        } else {
+            $this->hp = $hp;
+        }
+    }
+
+    public function getHpMax()
+    {
+        return self::HP_MAX;
+    }
+```
+
+On va maintenant rajouter des deux variables dans notre object ```Character.php``` qui vont être experience et level, il faudra aussi les rajouter dans votre table
+
+On pourra leur donner aussi des valeurs par defaut a ces deux varibles de cette manière :
+
+```php
+    private $experience = 0;
+
+    private $level = 1;
+```
+
+
+Du coup j'en profite pour faire une petit refactor sur le repository en créer une fonction update plus générique
+
+```php
+    public function update(Character $character)
+    {
+        $character->checkExperience();
+        $response = $this->base->prepare('UPDATE characters SET hp = :hp, ap = :ap, experience = :experience, level = :level WHERE id = :id');
+        $response->bindValue(':ap', $character->getAp(), PDO::PARAM_INT);
+        $response->bindValue(':experience', $character->getExperience(), PDO::PARAM_INT);
+        $response->bindValue(':hp', $character->getHp(), PDO::PARAM_INT);
+        $response->bindValue(':level', $character->getLevel(), PDO::PARAM_INT);
+        $response->bindValue(':id', $character->getId(), PDO::PARAM_INT);
+        $response->execute();
+    }
+```
+
+On va créer une fonction checkExperience pour faire passer les levels, on va créer une constante du palier d'expérience dans la classe Character que l'on va mettre à 1000
+
+```
+    public function checkExperience()
+    {
+        $experienceMax = $this->level * self::LEVEL_EXPERIENCE;
+        if ($this->experience >= $experienceMax) {
+            ++$this->level;
+            $this->experience = 0;
+        }
+    }
+```
+
+Il faudra donc rajouter un ajout d'expérience à chaque attaque ou chaque soins ET rajouter un ajout bonus si la personne le tue.
+
+Je vous laisse mettre ça dans ```attaque.php``` et ```heal.php```
+
+Les gains sont :
+
+| Attaque | Mort | Soin |
+| :--- | :---: | ---: |
+| 100 exp | 500 exp | 50 exp |
+
+Après nous rajoutons la gestion de la mort dans le ```header.php```
+
+```php
+if (isset($_SESSION['id'])) {
+    $characterRepository = new CharacterRepository($base);
+    $character = $characterRepository->find($_SESSION['id']);
+    if ($character->getState() === Character::DEAD) {
+        echo "Vous êtes mort mais rien n'est fini pour vous !";
+        $character->setHp($character->getHpMax());
+        $characterRepository->update($character);
+    }
+}
+```
+
+Il faudra rajouter les indications des HP max, l'expérience et le level dans le ``menu.php```
+
+Voici la fin de l'étape 8
