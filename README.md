@@ -640,22 +640,12 @@ Sur notre index, dans une premier temps, nous allons faire le listing des person
 
 ```php
     $listOfCharacter = $characterRepository->findAllWithoutMe($_SESSION['id']);
-    foreach ($listOfCharacter as $character) {
-        echo $character->getName() . "<br>";
-    }
-```
-
-Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` où nous allons traiter le combat.
-
-
-```php
-    $listOfCharacter = $characterRepository->findAllWithoutMe($_SESSION['id']);
     foreach ($listOfCharacter as $character):?>
         <a href="attaque.php?id=<?= $character->getId();?>"><?= $character->getName();?></a><br>
     <?php endforeach;
 ```
 
-Nous rajoutons le liens dans notre liste vers le fichier ```attaque.php``` et nous allons passer l'id de l'énemie en paramêtre pour le récupérer avec ```$_GET```
+Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` sous forme dans liens a où nous allons traiter le combat. Nous allons passer l'id de l'ennemi en paramêtre pour le récupérer avec ```$_GET```
 
 Notre fichier attaque maintenant :
 
@@ -712,7 +702,7 @@ Puis dans notre fichier attaque.php nous allons faire le combat
 
 Nous allons utiliser une valeur aléatoire avec la fonction rand (<http://php.net/manual/fr/function.rand.php>)
 
-Si jamais c'est point de vie sont en dessous de zero nous allons le concidérer comme mort.
+Si jamais c'est point de vie sont en dessous de zéro nous allons le concidérer comme mort.
 
 On va donc rajouter un champs dans notre object pour savoir son "state", voir si il est en vie ou mort.
 
@@ -735,7 +725,7 @@ puis une fonction
     }
 ```
 
-Du coup on peut un peu refactor notre fonction d'attaque
+Du coup on va faire une amélioration sur notre fonction d'attaque
 
 ```php
  if ($enemy->getState() === Character::DEAD) {
