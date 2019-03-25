@@ -853,7 +853,7 @@ Du coup on implémente cette fonction au niveau du login dans notre Repository
         return false;
 ```
 
-Et bien sur il faudra mettre à jour notre personnage d'où la fonction ```updateLastActionAndAp``` qu'il faudra créer. Cette fonction servira à mettre à jour la date de connexion dans la variable ```lastaction``` et les ```ap```.
+Et bien sur il faudra mettre à jour notre personnage d'où la fonction ```updateLastActionAndAp``` qu'il faudra créer. Cette fonction servira à mettre à jour la date de connexion dans la variable ```lastaction``` et ```ap```.
 
 Pour avoir en permance mon personnage une fois connecter, dans mon header.php je rajoute
 
