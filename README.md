@@ -313,6 +313,7 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
     $characterRepository->add($character);
 }
 ```
+PS : Ici, il va avoir une erreur, elle vient de la déclaration PDO plus haut, qui n'est pas nommé de la même manière.
 
 La différence avec notre précédant traitement est que nous instantions un object Character. Nous l'hydratons avec les données du formulaire.
 Puis nous le rajoutons en base avec la fonction ```add``` de notre CharacterRepository.
@@ -355,7 +356,7 @@ Voici notre etape 1 terminé.
 
 ---
 
-__Objectif :__ Nous allons pouvoir nous connecter avec notre personnage
+__Objectif :__ Nous allons pouvoir nous connecter avec notre personnage, nous allons mettre une menu dans l'etape 3 pour naviger sur ces différents fichiers
 
 ---
 
@@ -603,9 +604,20 @@ __Objectif :__ Nous allons permettre les combats entre deux personnages
 
 ---
 
-Dans un premier temps nous allons afficher tout les combatants disponibles
+Dans un premier temps nous allons afficher tout les combatants disponibles.
 
-Dans notre nous créons une nouvelle fonction
+Il va falloir changer notre __construct dans notre class Character en lui mettant une valeur par defaut null
+
+```php
+    public function __construct(array $arrayOfValues = null)
+    {
+        if ($arrayOfValues !== null) {
+            $this->hydrate($arrayOfValues);
+        }
+    }
+```
+
+Dans notre Repository, nous créons une nouvelle fonction
 
 ```
     public function findAllWithoutMe(int $id)
