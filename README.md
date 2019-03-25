@@ -469,7 +469,7 @@ Du coup je modifie ma fonction ```login()```
     }
 ```
 
-Vu que j'utilise la variable session **JE N OUBLIE SURTOUT PAS** de faire un session_start() <http://php.net/manual/fr/function.session-start.php> dans mon header.php
+Vu que j'utilise la variable ```$_SESSION``` **JE N OUBLIE SURTOUT PAS** de faire un session_start() <http://php.net/manual/fr/function.session-start.php> dans mon header.php
 
 Cette fonction renvoie soit false, soit l'object du personnage.
 
@@ -645,7 +645,7 @@ Sur notre index, dans une premier temps, nous allons faire le listing des person
     <?php endforeach;
 ```
 
-Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` sous forme dans liens a où nous allons traiter le combat. Nous allons passer l'id de l'ennemi en paramêtre pour le récupérer avec ```$_GET```
+Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` sous forme dans liens a où nous allons traiter le combat. Nous allons passer l'id de l'adversaire en paramêtre pour le récupérer avec ```$_GET```
 
 Notre fichier attaque maintenant :
 
