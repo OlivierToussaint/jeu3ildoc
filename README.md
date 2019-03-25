@@ -347,7 +347,7 @@ Le type boolean (<http://php.net/manual/fr/language.types.boolean.php>) va nous 
     }
 ```
 
-Voila notre test effectué, on va rajouter un message pour que l'utilisateur est un retour de son action.
+Nous allons remplacer dans notre fichier ```inscription.php``` la fonction ```add``` par ce code ci dessus pour rajouter la vérification et un retour de son action.
 
 Voici notre etape 1 terminé.
 
