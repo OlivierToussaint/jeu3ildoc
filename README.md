@@ -812,7 +812,7 @@ Vous allez la rajouter dans votre class avec son getter & setter associer puis d
 
 Une fois fait cela, on va définir une fonction qui va permettre de définir le nombre de point action à donner au moment de la connexion.
 
-Dans notre object on va donc comparer les object de dates
+Dans notre object on va donc comparer les object de dates dans notre ```Character.php```
 
 ```php
 public function getNewAp()
@@ -836,7 +836,7 @@ Et si c'est le cas, on calcul le nombre de point d'action a rajouté au personna
 
 On utilise différentes nouveautés que vous retrouverez dans la doc (<http://php.net/manual/en/datetime.diff.php>, <http://php.net/manual/en/function.floor.php>)
 
-Du coup on implémente cette fonction au niveau du login dans notre Repository
+Du coup on implémente cette fonction au niveau du login dans notre ```CharacterRepository```
 
 ```php
  if ($result = $this->findByName($name)) {
@@ -854,6 +854,20 @@ Du coup on implémente cette fonction au niveau du login dans notre Repository
 ```
 
 Et bien sur il faudra mettre à jour notre personnage d'où la fonction ```updateLastActionAndAp``` qu'il faudra créer. Cette fonction servira à mettre à jour la date de connexion dans la variable ```lastaction``` et ```ap```.
+
+Exemple :
+```
+public function updateLastActionAndAp(Character $character)
+    {
+        $datenow = new DateTime('now');
+        $response = $this->base->prepare('UPDATE characters SET lastaction = :lastaction, ap = :ap WHERE id = :id');
+        $response->bindValue(':lastaction', $datenow->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $response->bindValue(':ap', $character->getAp(), PDO::PARAM_INT);
+        $response->bindValue(':id', $character->getId(), PDO::PARAM_INT);
+
+        $response->execute();
+    }
+```
 
 Pour avoir en permance mon personnage une fois connecter, dans mon header.php je rajoute
 
