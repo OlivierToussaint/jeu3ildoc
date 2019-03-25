@@ -9,7 +9,7 @@ __Objectif :__ Nous allons initialisé notre project, créer notre object et tab
 
 ---
 
-Nous allons créer un repertoire class où seront placés nos fichies de classes.
+Nous allons créer un répertoire class où seront placés nos fichiers de classes.
 
 A la racine, nous aurons un fichier ```header.php``` qui va contenir des fonctions et notre connexion à la base puis un ```index.php```
 
@@ -114,7 +114,7 @@ Si jamais la personne se trompe dans les ```key``` du tableau, nous allons rajou
 Dans notre construct nous rajoutons l'appelle à cette fonction si jamais on lui passe un tableau de données : 
 
 ```php
-    public function __construct(?array $arrayOfValues)
+    public function __construct(array $arrayOfValues = null)
     {
         if ($arrayOfValues !== null) {
             $this->hydrate($arrayOfValues);
@@ -122,19 +122,19 @@ Dans notre construct nous rajoutons l'appelle à cette fonction si jamais on lui
     }
 ```
 
-La fonction ```__construct``` (<http://php.net/manual/fr/language.oop5.decon.php>) dans notre object permet de déclancher une action lors que nous instanction l'object par exemple : ```$character = new Character();```
+La fonction ```__construct``` (<http://php.net/manual/fr/language.oop5.decon.php>) dans notre object permet de déclancher une action lors que nous instantion l'object par exemple : ```$character = new Character();```
 
-Ici, j'ai deux possibilité : soit je lui passe un tableau, soit je ne lui passe rien (d'ou le ? devant le array)
+Ici, j'ai deux possibilités : soit je lui passe un tableau, soit je ne lui passe rien.
 
 Si jamais je lui passe un tableau je vais lancer la fonction hydrate dessus.
 
 Exemple : ```$character = new Character(['name' => 'Olivier', 'hp' => '100', 'ap' => '10']);```
 
-mon object ```$character``` a maintenant les champs name, hp, ap d'hydrater, en faisant un echo ```$character->getName()```, j'obtiens le resultat Olivier
+Mon object ```$character``` a maintenant les champs name, hp, ap d'hydrater, en faisant un echo ```$character->getName()```, j'obtiens le resultat Olivier
 
 Voila pour notre permier object.
 
-Passons à nos deux autres fichiers qui sont vide : ```index.php``` et ```header.php```
+Passons à nos deux autres fichiers qui sont vides : ```index.php``` et ```header.php```
 
 Pour avoir accès à notre object Character, il faut que je l'intégre dans notre header avec la fonction ```require``` (<http://php.net/manual/fr/function.require.php>) pour pouvoir l'utiliser plus tard.
 
@@ -151,7 +151,7 @@ echo "nom du joueur : " . $character->getName();
 
 Cela fonctionne mais imaginons que dans mon répertoire class, j'ai 40 classes à charger. Ca va vite devenir relou.
 
-Du coup php nous propose une solution via son ```spl_autoload_register``` <http://php.net/manual/fr/function.spl-autoload-register.php>
+Du coup, php nous propose une solution via son ```spl_autoload_register``` <http://php.net/manual/fr/function.spl-autoload-register.php>
  
 Ce qui nous donne ça :
 
@@ -165,7 +165,7 @@ function loadClass($classname)
 spl_autoload_register('loadClass');
 ```
 
-Ici nous allons le placer dans header histoire que des que nous appelerons une classe dans notre fichier, php ira la chercher en automatique.
+Ici nous allons le placer dans header pour detecter notre appel à une classe dans notre fichier, php ira la chercher en automatique.
 
 Super ! On va tester directement ça dans notre index.php
 
@@ -606,7 +606,7 @@ __Objectif :__ Nous allons permettre les combats entre deux personnages
 
 Dans un premier temps nous allons afficher tout les combatants disponibles.
 
-Il va falloir changer notre __construct dans notre class Character en lui mettant une valeur par defaut null
+Il y avait une erreur dans l'étape 1, vérifier votre __construct dans votre character.
 
 ```php
     public function __construct(array $arrayOfValues = null)
@@ -634,9 +634,9 @@ Dans notre Repository, nous créons une nouvelle fonction
     }
 ```
 
-avec PDO::FETCH_CLASS, nous allons pouvoir hydrater directement notre object sans lui passer de tableau c'est PDO qui va s'occuper de remplir les getter et les setter (<http://php.net/manual/fr/pdostatement.fetchall.php>). Bien sur nous nous excluons du resultat.
+avec PDO::FETCH_CLASS, nous allons pouvoir hydrater directement notre object sans lui passer de tableau c'est PDO qui va s'occuper de remplir les getter et les setter (<http://php.net/manual/fr/pdostatement.fetchall.php>). Bien sur nous nous excluons du résultat.
 
-Sur notre index, dans une premier temps, nous allons faire le listing des personnes autour de nous
+Sur notre index, dans une premier temps, nous allons faire le listing des personnes autour de nous.
 
 ```php
     $listOfCharacter = $characterRepository->findAllWithoutMe($_SESSION['id']);
@@ -645,7 +645,7 @@ Sur notre index, dans une premier temps, nous allons faire le listing des person
     }
 ```
 
-Pour attaquer nous allons devoir recuprer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` où nous allons traiter le combat.
+Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` où nous allons traiter le combat.
 
 
 ```php
@@ -655,8 +655,7 @@ Pour attaquer nous allons devoir recuprer ```$id``` de l'attaquant que nous tran
     <?php endforeach;
 ```
 
-Nous rajoutons le liens dans notre liste vers le fichier ```attaque.php``` et nous allons passer l'id de l'enemy en parametre pour le recuperer avec ```$_GET```
-
+Nous rajoutons le liens dans notre liste vers le fichier ```attaque.php``` et nous allons passer l'id de l'énemie en paramêtre pour le récupérer avec ```$_GET```
 
 Notre fichier attaque maintenant :
 
@@ -677,7 +676,7 @@ require __DIR__.'/footer.php';
 ?>
 ```
 
-Ici on récupère deux objects ```Character``` et nous affichons juste qui attaque qui
+Ici on récupère deux objects ```Character``` et nous affichons juste qui attaque qui.
 
 Pour les attaques, nous allons créer une fonction dans le CharacterRepository pour permettre la mise à jour les points de vie
 
