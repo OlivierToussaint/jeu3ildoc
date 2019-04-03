@@ -1168,4 +1168,176 @@ if (isset($_SESSION['id'])) {
 
 Il faudra rajouter les indications des HP max, l'expérience et le level dans le ``menu.php```
 
-Voici la fin de l'étape 8
+Voici la fin de l'étape 8. Dans l'étape 9 et 10, nous ferons évoluer la structure du projet et non son contenu.
+
+#Etape 9
+---
+
+__Objectif :__ Mettre composer et les namespaces dans notre projet
+
+---
+
+Nous allons mettre le gestionnaire de package de php qui est composer <https://getcomposer.org>
+Pensez à bien lire comment l'installer et suivez les instructions, il est peut être déjà installer sur votre machine pour tester
+
+```bash
+composer -V
+```
+
+Une fois installé, nous allons l'initialisé pour utiliser son autoload. <https://getcomposer.org/doc/01-basic-usage.md>
+
+On va créer un composer.json à la base du projet 
+
+```json
+{
+  "autoload": {
+    "psr-4": {"App\\": "class/"}
+  }
+}
+```
+
+Dans la documentation il nous dise qu'après avoir fait le fichier composer.json avec l'autoload, il faut lancer cette commande
+
+```bash
+composer dump-autoload
+```
+
+Parfait, maintenant il va falloir modifier/refactorer nos projets pour nous permettre d'être plus moderne et compatible avec cette autoload
+
+L'autoload de composer est basé sur le psr-4 <https://www.php-fig.org/psr/psr-4/>
+
+Avec cette annontation il va falloir mettre un namespace dans nos classes :
+
+```php
+namespace App;
+```
+
+Pour les appeler il faudra utiliser la function use <https://www.php.net/manual/fr/language.namespaces.importing.php>.
+
+Par exemple dans notre header, il faudra rajouter 
+
+```php
+use App\CharacterRepository;
+use App\Character;
+```
+
+Tant que nous sommes dans le header, nous allons supprimer la ligne de l'autoload que nous avons créer avec spl_autoload_register et mettre celle de composer à la place 
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+```
+
+La plus grosse étape est faite, maintenant il va falloir rajouter les ```use``` la où l'on en a besoin.
+
+Notre projet n'aura pas changé sur sa forme mais sur son fond dans cette etape 9.
+
+#Etape 10
+---
+
+__Objectif :__ Intégré un moteur de template twig
+
+---
+
+Nous allons arrêter de mélanger le php avec le html, nous allons passer par un moteur de template twig <https://twig.symfony.com>
+
+Pour intégrer twig a notre projet rien de plus simple, nous allons le faire avec composer
+
+```bash
+composer require twig/twig
+```
+
+Et nous voila avec twig intégré à notre projet.
+
+Pour l'initier il faut suivre la doc, et nous allons déclarer ça dans notre header.php
+
+```php
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig = new \Twig\Environment($loader);
+```
+
+Nous allons créer un repertoire template où nous allons mettre tout nos fichiers destiner à l'affichage (les vues)
+
+Par exemple pour le header nous allons la modifier de cette manière
+
+```php
+$characters = null;
+if (isset($_SESSION['id'])) {
+    $characters = $characterRepository->findAllWithoutMe($_SESSION['id']);
+}
+echo $twig->render('index.html.twig', ['characters' => $characters]);
+```
+
+Qu'est ce que l'on fait ? On indique avec $twig->render que l'on veut un rendu via le template index.html.twig en lui passant différent parametre (ici characters)
+
+Notre fichier index.html.twig va être très simple
+
+```twig
+{% for character in characters %}
+{{ character.name }} : Action disponible <a href="attaque.php?id={{ character.id}}">Attaque</a> - <a href="heal.php?id={{ character.id}}">Soin</a><br>
+{% endfor %}
+```
+Nous utilisons la syntaxe twig qui est dans la doc.
+
+Ici le rendu devrait être EXACTEMENT le même. Nous avons juste déporter l'affichage. Nous tendons petit à petit vers notre modèle MVC.
+
+
+Nous allons besoin d'avoir la session en variable global avec la fonction addGolbal
+
+```php
+$twig->addGlobal("session", $_SESSION);
+```
+
+On pourra rajouter ```character``` quand il est connecté, ça va nous donner le menu
+
+```twig
+<nav class="menu">
+    <a href="index.php">Index</a>
+    {% if session.id %}
+        <a href="journal.php">Journal</a>
+        <a href="deconnection.php">Déconnection</a>
+    {% else %}
+        <a href="inscription.php">Inscription</a>
+        <a href="connexion.php">Connexion</a>
+    {% endif %}
+</nav>
+
+{% if session.id %}
+    <div>
+        HP : {{ character.hp }} / {{ character.hpMax }}, AP : {{ character.ap }},
+        EXP : {{ character.experience }}, LVL : {{ character.level }}
+    </div>
+{% endif %}
+```
+
+On va créer le reste des templates et utiliser la tag twig extends <https://twig.symfony.com/doc/2.x/tags/extends.html> avec un template ```base.html.twig```
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css" >
+    <title>Mon jeu</title>
+</head>
+<body>
+{% include "menu.html.twig" %}
+{% block body %}{% endblock %}
+</body>
+</html>
+```
+
+Du coup on va pouvoir remanier l'index.html.twig
+
+```php
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% for character in characters %}
+        {{ character.name }} : Action disponible <a href="attaque.php?id={{ character.id}}">Attaque</a> - <a href="heal.php?id={{ character.id}}">Soin</a><br>
+    {% endfor %}
+{% endblock %}
+```
+
+Il faudra faire le reste des templates pour attaque, connexion, heal, inscription, journal.
+
+Fin de l'étape 10
