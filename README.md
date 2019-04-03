@@ -1311,6 +1311,7 @@ On pourra rajouter ```character``` quand il est connecté, ça va nous donner le
 
 On va créer le reste des templates et utiliser la tag twig extends <https://twig.symfony.com/doc/2.x/tags/extends.html> avec un template ```base.html.twig```
 
+{% raw %} 
 ```html
 <!DOCTYPE html>
 <html>
@@ -1325,9 +1326,11 @@ On va créer le reste des templates et utiliser la tag twig extends <https://twi
 </body>
 </html>
 ```
+{% endraw %}
 
 Du coup on va pouvoir remanier l'index.html.twig
 
+{% raw %} 
 ```php
 {% extends "base.html.twig" %}
 
@@ -1337,6 +1340,7 @@ Du coup on va pouvoir remanier l'index.html.twig
     {% endfor %}
 {% endblock %}
 ```
+{% endraw %}
 
 Il faudra faire le reste des templates pour attaque, connexion, heal, inscription, journal.
 
