@@ -349,18 +349,18 @@ Le type boolean (<http://php.net/manual/fr/language.types.boolean.php>) va nous 
 
 Nous allons remplacer dans notre fichier ```inscription.php``` la fonction ```add``` par ce code ci dessus pour rajouter la vérification et un retour de son action.
 
-Voici notre etape 1 terminé.
+Voici notre étape 1 terminée.
 
 
 # Etape 2
 
 ---
 
-__Objectif :__ Nous allons pouvoir nous connecter avec notre personnage, nous allons mettre une menu dans l'etape 3 pour naviger sur ces différents fichiers
+__Objectif :__ Nous allons pouvoir nous connecter avec notre personnage, nous allons mettre un menu dans l'étape 3 pour naviger sur ces différents fichiers.
 
 ---
 
-Pour ce faire nous allons créer une nouvelle page connexion.php dedans nous allons mettre un formulaire qui nous permettra de nous connecter
+Pour ce faire nous allons créer une nouvelle page connexion.php dedans nous allons mettre un formulaire qui nous permettra de nous connecter.
 
 Notre formulaire sera encore une fois très simple : 
 
@@ -392,10 +392,10 @@ Du coup nous allons essentiellement travailler dans le CharacterRepository
 Nous allons analyser nos besoins :
 
 - Une fonction login qui va me servir à comparer les mots de passe pour me connecter pour determiner si je remplis la ```$_SESSION```
-- Une autre fonction pour chercher dans la base de donnéer le personnage via le nom
-- Et enfin un fonction qui va me permettre de chercher un personnage via son id et qui hydrate l'object Character pour me faire une retour
+- Une autre fonction pour chercher dans la base de données le personnage via le nom
+- Et enfin une fonction qui va me permettre de chercher un personnage via son id et qui hydrate l'object Character pour me faire une retour
 
-Nous allons commencer par faire la fonction qui cherche le nom du personnage dans la base de donnée, elle sera presque pareil que exist :
+Nous allons commencer par faire la fonction qui cherche le nom du personnage dans la base de données, elle sera presque pareille que exist :
 
 ```php
     public function findByName(string $name)
@@ -424,13 +424,13 @@ Très bien maintenant je peux commencer à faire la fonction login
     }
 ```
 
-Ici je test le resultat de ```findByName``` pour voir si il existe puis si c'est le cas je fais un ```password_verify```  <http://php.net/manual/fr/function.password-verify.php>
+Ici je teste le résultat de ```findByName``` pour voir s'il existe puis, si c'est le cas, je fais un ```password_verify```  <http://php.net/manual/fr/function.password-verify.php>
 
 Si jamais il ne trouve pas le nom ou bien le mot de passe ne correspond pas je retourne false.
 
-Mais ce que j'aimerais c'est qu'au lieu qu'il me retourne true, il me retourne l'oject du personnage hydrater ainsi que remplir mes sessions
+Mais ce que j'aimerais c'est qu'au lieu qu'il me retourne true, il me retourne l'oject du personnage hydraté ainsi que remplir mes sessions
 
-Pour ce faire je vais creer une nouvelle fonction ```find()``` dans mon CharacterRepository
+Pour ce faire je vais créer une nouvelle fonction ```find()``` dans mon CharacterRepository
 
 ```php
 public function find(int $id)
@@ -448,7 +448,7 @@ public function find(int $id)
     }
 ```
 
-Je cherche un personnage par rapport à son id, et si il existe je lui retourne l'oject hydrater
+Je cherche un personnage par rapport à son id, et s'il existe je lui retourne l'oject hydraté
 
 Du coup je modifie ma fonction ```login()```
 
@@ -492,7 +492,7 @@ if (isset($_SESSION['id'])) {
 ?>
 ```
 
-La connexion c'est bien mais il va falloir nous créer un espace de deconnection.
+La connexion c'est bien mais il va falloir nous créer un espace de deconnexion.
 
 Rien de plus simple nous allons créer un fichier deconnection.php
 
@@ -604,7 +604,7 @@ __Objectif :__ Nous allons permettre les combats entre deux personnages
 
 ---
 
-Dans un premier temps nous allons afficher tout les combatants disponibles.
+Dans un premier temps nous allons afficher tous les combatants disponibles.
 
 Il y avait une erreur dans l'étape 1, vérifier votre __construct dans votre character.
 
@@ -634,7 +634,7 @@ Dans notre Repository, nous créons une nouvelle fonction
     }
 ```
 
-avec PDO::FETCH_CLASS, nous allons pouvoir hydrater directement notre object sans lui passer de tableau c'est PDO qui va s'occuper de remplir les getter et les setter (<http://php.net/manual/fr/pdostatement.fetchall.php>). Bien sur nous nous excluons du résultat.
+avec PDO::FETCH_CLASS, nous allons pouvoir hydrater directement notre object sans lui passer de tableau c'est PDO qui va s'occuper de remplir les getter et les setter (<http://php.net/manual/fr/pdostatement.fetchall.php>). Bien sûr, nous nous excluons du résultat.
 
 Sur notre index, dans une premier temps, nous allons faire le listing des personnes autour de nous.
 
@@ -645,7 +645,7 @@ Sur notre index, dans une premier temps, nous allons faire le listing des person
     <?php endforeach;
 ```
 
-Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` sous forme dans liens a où nous allons traiter le combat. Nous allons passer l'id de l'adversaire en paramêtre pour le récupérer avec ```$_GET```
+Pour attaquer nous allons devoir récupérer ```$id``` de l'attaquant que nous transmettrons à notre nouvelle page ```attaque.php``` sous forme dans liens a où nous allons traiter le combat. Nous allons passer l'id de l'adversaire en paramètre pour le récupérer avec ```$_GET```
 
 Notre fichier attaque maintenant :
 
@@ -668,7 +668,7 @@ require __DIR__.'/footer.php';
 
 Ici on récupère deux objects ```Character``` et nous affichons juste qui attaque qui.
 
-Pour les attaques, nous allons créer une fonction dans le CharacterRepository pour permettre la mise à jour les points de vie
+Pour les attaques, nous allons créer une fonction dans le CharacterRepository pour permettre la mise à jour des points de vie
 
 ```php
 public function updateHp(Character $character)
@@ -704,7 +704,7 @@ Nous allons utiliser une valeur aléatoire avec la fonction rand (<http://php.ne
 
 Si jamais c'est point de vie sont en dessous de zéro nous allons le concidérer comme mort.
 
-On va donc rajouter un champs dans notre object pour savoir son "state", voir si il est en vie ou mort.
+On va donc rajouter un champ dans notre object pour savoir son "state", voir s'il est en vie ou mort.
 
 Dans notre Character.php nous allons rajouter des constantes (<http://php.net/manual/fr/language.constants.php>) au dessus de nos variables
 
@@ -746,7 +746,7 @@ Du coup on va faire une amélioration sur notre fonction d'attaque
 
 Maintenant que l'attaque est faite, nous allons ajouter le fait de devoir dépenser des points d'actions pour attaquer.
 
-Nous allons définir son cout dans une constante dans notre object personnage
+Nous allons définir son coût dans une constante dans notre object personnage
 
 ```php
     public const ATTAQUE_COST = 5;
@@ -780,24 +780,24 @@ if ($enemy->getState() === Character::DEAD) {
     }
 ```
 
-Nous testons si le personnage a assez de point d'action pour attaquer, si il en a assez nous continuons l'action tout en mettant à jour les points actions du personnage.
+Nous testons si le personnage a assez de points d'action pour attaquer, s'il en a assez nous continuons l'action tout en mettant à jour les points d'action du personnage.
 
 Il faudra créer la fonction updateAp qui est assez simple du coup je vous laisse faire.
 
-Et voici notre etape 4 finalisé
+Et voici notre étape 4 finalisée
 
-#Etape 5
+#Étape 5
 ---
 
-__Objectif :__ Regénération des points d'action
+__Objectif :__ RÉgénération des points d'action
 
 ---
 
-Pour recuperer des points d'action nous allons intéragir avec des dates, et en php on manipule les dates avec l'object Datetime (<http://php.net/manual/fr/class.datetime.php>). Bonne lecture de la doc, vous en aurez besoin.
+Pour récuperer des points d'action nous allons interagir avec des dates, et en php on manipule les dates avec l'object Datetime (<http://php.net/manual/fr/class.datetime.php>). Bonne lecture de la doc, vous en aurez besoin.
 
 Alors nous allons rajouter quelques variables à notre object de personnage
 
-Pour commencer on va définir à combien est la régénération de point d'action et combien de point d'action maximun on peut avoir.
+Pour commencer on va définir à combien est la régénération de points d'action et combien de points d'action maximum on peut avoir.
 
 Je vais définir deux constantes :
 
@@ -808,11 +808,11 @@ Je vais définir deux constantes :
 
 On va calculer ces points d'action par rapport à une date que l'on va nommer ```$lastaction```
 
-Vous allez la rajouter dans votre class avec son getter & setter associer puis dans votre base de données en DATETIME
+Vous allez la rajouter dans votre class avec son getter & setter associés puis dans votre base de données en DATETIME
 
-Une fois fait cela, on va définir une fonction qui va permettre de définir le nombre de point action à donner au moment de la connexion.
+Une fois fait, on va définir une fonction qui va permettre de définir le nombre de points action à donner au moment de la connexion.
 
-Dans notre object on va donc comparer les object de dates dans notre ```Character.php```
+Dans notre object on va donc comparer les objects de dates dans notre ```Character.php```
 
 ```php
 public function getNewAp()
@@ -828,11 +828,11 @@ public function getNewAp()
     }
 ```
 
-On calcul la différence entre la date de dernier connexion qui est dans la base et la date de l'instant.
+On calcule la différence entre la date de dernièrr connexion qui est dans la base et la date de l'instant.
 
 On regarde si les secondes de différents font plus que les secondes que nous avons mise en constantes (60 s = 1 point d'action je le rappelle)
 
-Et si c'est le cas, on calcul le nombre de point d'action a rajouté au personnage.
+Et si c'est le cas, on calculr le nombre de points d'action à rajouter au personnage.
 
 On utilise différentes nouveautés que vous retrouverez dans la doc (<http://php.net/manual/en/datetime.diff.php>, <http://php.net/manual/en/function.floor.php>)
 
@@ -853,7 +853,7 @@ Du coup on implémente cette fonction au niveau du login dans notre ```Character
         return false;
 ```
 
-Et bien sur il faudra mettre à jour notre personnage d'où la fonction ```updateLastActionAndAp``` qu'il faudra créer. Cette fonction servira à mettre à jour la date de connexion dans la variable ```lastaction``` et ```ap```.
+Et bien sûr, il faudra mettre à jour notre personnage d'où la fonction ```updateLastActionAndAp``` qu'il faudra créer. Cette fonction servira à mettre à jour la date de connexion dans la variable ```lastaction``` et ```ap```.
 
 Exemple :
 ```
@@ -869,7 +869,7 @@ public function updateLastActionAndAp(Character $character)
     }
 ```
 
-Pour avoir en permance mon personnage une fois connecter, dans mon header.php je rajoute
+Pour avoir en permanence mon personnage une fois connecté, dans mon header.php je rajoute
 
 ```php
 if (isset($_SESSION['id'])) {
@@ -888,19 +888,19 @@ et dans mon menu.php
     <?php endif ?>
 ```
 
-J'ai maintenant tout le temps mes points de vie et mes points d'action d'afficher.
+J'ai maintenant tout le temps mes points de vie et mes points d'action d'affichés.
 
 Je viens de finir l'étape 5 et mon jeu est fonctionnel
 
 
-#Etape 6
+#Étape 6
 ---
 
 __Objectif :__ Création d'un journal qui liste les différentes actions
 
 ---
 
-Pour commencer nous allons créer l'object ```CharacterLog.php```
+Pour commencer, nous allons créer l'object ```CharacterLog.php```
 
 Dedans il y aura quatre variables : id, message, add_at, character_id
 
@@ -949,7 +949,7 @@ class CharacterLogRepository
 }
 ```
 
-Nous avons deux fonctions, une pour ecrire dans le journal, l'autre pour afficher sur le journal du personnage.
+Nous avons deux fonctions, une pour écrire dans le journal, l'autre pour afficher sur le journal du personnage.
 
 On va passer l'écrire du journal dans le fichier ```attaque.php```
 
@@ -962,9 +962,9 @@ On avait déjà le message de fait, il suffira de le mettre en variable et de le
             $characterLogRepository->add($enemy, $message);
 ```
 
-J'enregistre dans mon journal et dans celui que j'attaque pour qu'il est une trace.
+J'enregistre dans mon journal et dans celui que j'attaque pour qu'il ait une trace.
 
-Puis je créer un fichier ```journal.php``` ou je vais afficher les actions lié au personnage.
+Puis je crée un fichier ```journal.php``` où je vais afficher les actions liées au personnage.
 
 ```php
 <?php
@@ -988,9 +988,9 @@ require __DIR__.'/footer.php';
 
 Il faudra aussi mettre une entrée dans notre menu.php pour accéder au journal du personnage.
 
-L'étape 6 est fini.
+L'étape 6 est finie.
 
-#Etape 7
+#Étape 7
 ---
 
 __Objectif :__ Création des soins
@@ -999,7 +999,7 @@ __Objectif :__ Création des soins
 
 On veut commencer à diversifier notre jeu, pour ce faire nous allons implémenter le soins.
 
-Comme pour l'attaque, il faudra définir un cout dans la class Character : 
+Comme pour l'attaque, il faudra définir un coût dans la class Character : 
 
 ```php
     public const HEAL_COST = 2;
@@ -1041,7 +1041,7 @@ if (isset($_SESSION['id'])) {
             $characterLogRepository->add($friend, $message);
 
         } else {
-            echo "Vous n'avez pas assez de point d'action";
+            echo "Vous n'avez pas assez de points d'action";
         }
     }
 }
@@ -1051,7 +1051,7 @@ require __DIR__.'/footer.php';
 ?>
 ```
 
-Tout est pret, il ne reste plus qu'a donné la possiblité à l'utilisateur d'utiliser l'un ou l'autre, ça va se passer dans ```index.php```
+Tout est prêt, il ne reste plus qu'à donner la possiblité à l'utilisateur d'utiliser l'un ou l'autre, ça va se passer dans ```index.php```
 
 ```php
         <?= $character->getName();?> : Action disponible <a href="attaque.php?id=<?= $character->getId();?>">Attaque</a> - <a href="heal.php?id=<?= $character->getId();?>">Soin</a><br>
@@ -1062,7 +1062,7 @@ En peu de temps nous avons diversifié nos actions dans le jeu, on peut heal ou 
 #Etape 8
 ---
 
-__Objectif :__ On mets en place les hp max, les ap max ainsi que du leveling
+__Objectif :__ On met en place les hp max, les ap max ainsi que du leveling
 
 ---
 
@@ -1074,9 +1074,9 @@ On va faire les constantes pour les max
     public const AP_MAX = 100;
 ```
 
-Du coup on va faire un refactor des deux fonctions qui mette en place les HP et AP
+Du coup on va faire un refactoring des deux fonctions qui mettent en place les HP et AP
 
-Pour les AP ça va être dans un la fonction ```getNewAp()```
+Pour les AP ça va être dans la fonction ```getNewAp()```
 
 ```php
             if ($this->ap > self::AP_MAX) {
@@ -1104,7 +1104,7 @@ et pour les HP ça va être dans setHp tout simplement, on va du coup créer aus
 
 On va maintenant rajouter des deux variables dans notre object ```Character.php``` qui vont être experience et level, il faudra aussi les rajouter dans votre table
 
-On pourra leur donner aussi des valeurs par defaut a ces deux varibles de cette manière :
+On pourra leur donner aussi des valeurs par défaut à ces deux variables de cette manière :
 
 ```php
     private $experience = 0;
@@ -1113,7 +1113,7 @@ On pourra leur donner aussi des valeurs par defaut a ces deux varibles de cette 
 ```
 
 
-Du coup j'en profite pour faire une petit refactor sur le repository en créer une fonction update plus générique
+Du coup j'en profite pour faire une petit refactoring sur le repository en créant une fonction update plus générique
 
 ```php
     public function update(Character $character)
@@ -1142,7 +1142,7 @@ On va créer une fonction checkExperience pour faire passer les levels, on va cr
     }
 ```
 
-Il faudra donc rajouter un ajout d'expérience à chaque attaque ou chaque soins ET rajouter un ajout bonus si la personne le tue.
+Il faudra donc rajouter un ajout d'expérience à chaque attaque ou chaque soin ET rajouter un ajout bonus si la personne le tue.
 
 Je vous laisse mettre ça dans ```attaque.php``` et ```heal.php```
 
@@ -1170,7 +1170,7 @@ Il faudra rajouter les indications des HP max, l'expérience et le level dans le
 
 Voici la fin de l'étape 8. Dans l'étape 9 et 10, nous ferons évoluer la structure du projet et non son contenu.
 
-#Etape 9
+#Étape 9
 ---
 
 __Objectif :__ Mettre composer et les namespaces dans notre projet
@@ -1178,13 +1178,13 @@ __Objectif :__ Mettre composer et les namespaces dans notre projet
 ---
 
 Nous allons mettre le gestionnaire de package de php qui est composer <https://getcomposer.org>
-Pensez à bien lire comment l'installer et suivez les instructions, il est peut être déjà installer sur votre machine pour tester
+Pensez à bien lire comment l'installer et suivez les instructions, il est peut être déjà installé sur votre machine pour tester
 
 ```bash
 composer -V
 ```
 
-Une fois installé, nous allons l'initialisé pour utiliser son autoload. <https://getcomposer.org/doc/01-basic-usage.md>
+Une fois installé, nous allons l'initialiser pour utiliser son autoload. <https://getcomposer.org/doc/01-basic-usage.md>
 
 On va créer un composer.json à la base du projet 
 
@@ -1196,15 +1196,15 @@ On va créer un composer.json à la base du projet
 }
 ```
 
-Dans la documentation il nous dise qu'après avoir fait le fichier composer.json avec l'autoload, il faut lancer cette commande
+Dans la documentation ils nous disent qu'après avoir fait le fichier composer.json avec l'autoload, il faut lancer cette commande
 
 ```bash
 composer dump-autoload
 ```
 
-Parfait, maintenant il va falloir modifier/refactorer nos projets pour nous permettre d'être plus moderne et compatible avec cette autoload
+Parfait, maintenant il va falloir modifier/refactorer nos projets pour nous permettre d'être plus moderne et compatible avec cet autoload
 
-L'autoload de composer est basé sur le psr-4 <https://www.php-fig.org/psr/psr-4/>
+L'autoload de composer est basé sur la PSR-4 <https://www.php-fig.org/psr/psr-4/>
 
 Avec cette annontation il va falloir mettre un namespace dans nos classes :
 
@@ -1212,7 +1212,7 @@ Avec cette annontation il va falloir mettre un namespace dans nos classes :
 namespace App;
 ```
 
-Pour les appeler il faudra utiliser la function use <https://www.php.net/manual/fr/language.namespaces.importing.php>.
+Pour les appeler, il faudra utiliser la function use <https://www.php.net/manual/fr/language.namespaces.importing.php>.
 
 Par exemple dans notre header, il faudra rajouter 
 
@@ -1221,32 +1221,32 @@ use App\CharacterRepository;
 use App\Character;
 ```
 
-Tant que nous sommes dans le header, nous allons supprimer la ligne de l'autoload que nous avons créer avec spl_autoload_register et mettre celle de composer à la place 
+Tant que nous sommes dans le header, nous allons supprimer la ligne de l'autoload que nous avons créée avec spl_autoload_register et mettre celle de composer à la place 
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
 ```
 
-La plus grosse étape est faite, maintenant il va falloir rajouter les ```use``` la où l'on en a besoin.
+La plus grosse étape est faite, maintenant il va falloir rajouter les ```use``` là où l'on en a besoin.
 
-Notre projet n'aura pas changé sur sa forme mais sur son fond dans cette etape 9.
+Notre projet n'aura pas changé sur sa forme mais sur son fond dans cette étape 9.
 
-#Etape 10
+#Étape 10
 ---
 
-__Objectif :__ Intégré un moteur de template twig
+__Objectif :__ Intégrer un moteur de templates Twig
 
 ---
 
-Nous allons arrêter de mélanger le php avec le html, nous allons passer par un moteur de template twig <https://twig.symfony.com>
+Nous allons arrêter de mélanger le php avec le html, nous allons passer par le moteur de templates Twig <https://twig.symfony.com>
 
-Pour intégrer twig a notre projet rien de plus simple, nous allons le faire avec composer
+Pour intégrer Twig à notre projet rien de plus simple, nous allons le faire avec Composer
 
 ```bash
 composer require twig/twig
 ```
 
-Et nous voila avec twig intégré à notre projet.
+Et nous voilà avec Twig intégré à notre projet.
 
 Pour l'initier il faut suivre la doc, et nous allons déclarer ça dans notre header.php
 
@@ -1255,7 +1255,7 @@ $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
 ```
 
-Nous allons créer un repertoire template où nous allons mettre tout nos fichiers destiner à l'affichage (les vues)
+Nous allons créer un repertoire template où nous allons mettre tout nos fichiers destinés à l'affichage (les vues)
 
 Par exemple pour le header nous allons la modifier de cette manière
 
@@ -1267,21 +1267,21 @@ if (isset($_SESSION['id'])) {
 echo $twig->render('index.html.twig', ['characters' => $characters]);
 ```
 
-Qu'est ce que l'on fait ? On indique avec $twig->render que l'on veut un rendu via le template index.html.twig en lui passant différent parametre (ici characters)
+Qu'est-ce que l'on fait ? On indique avec $twig->render que l'on veut un rendu via le template index.html.twig en lui passant différents paramètres (ici characters)
 
 Notre fichier index.html.twig va être très simple
 
 ```twig
 {% for character in characters %}
-{{ character.name }} : Action disponible <a href="attaque.php?id={{ character.id}}">Attaque</a> - <a href="heal.php?id={{ character.id}}">Soin</a><br>
+{{ character.name }} : Actions disponibles <a href="attaque.php?id={{ character.id}}">Attaque</a> - <a href="heal.php?id={{ character.id}}">Soin</a><br>
 {% endfor %}
 ```
-Nous utilisons la syntaxe twig qui est dans la doc.
+Nous utilisons la syntaxe Twig qui est dans la doc.
 
-Ici le rendu devrait être EXACTEMENT le même. Nous avons juste déporter l'affichage. Nous tendons petit à petit vers notre modèle MVC.
+Ici le rendu devrait être EXACTEMENT le même. Nous avons juste déporté l'affichage. Nous tendons petit à petit vers notre modèle MVC.
 
 
-Nous allons besoin d'avoir la session en variable global avec la fonction addGolbal
+Nous avons besoin de la session en variable global avec la fonction addGolbal
 
 ```php
 $twig->addGlobal("session", $_SESSION);
@@ -1309,7 +1309,7 @@ On pourra rajouter ```character``` quand il est connecté, ça va nous donner le
 {% endif %}
 ```
 
-On va créer le reste des templates et utiliser la tag twig extends <https://twig.symfony.com/doc/2.x/tags/extends.html> avec un template ```base.html.twig```
+On va créer le reste des templates et utiliser la tag Twig extends <https://twig.symfony.com/doc/2.x/tags/extends.html> avec un template ```base.html.twig```
 
 {% raw %} 
 ```html
