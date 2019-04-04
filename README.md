@@ -5,21 +5,21 @@ Avant de commencer, vous devez avoir :
 # Etape 1
 ---
 
-__Objectif :__ Nous allons initialisé notre project, créer notre object et table character, et faire en sorte que nous puisse en ajouter via un formulaire.
+__Objectif :__ Nous allons initialiser notre project, créer notre object et table character, et faire en sorte que nous puissions en ajouter via un formulaire.
 
 ---
 
 Nous allons créer un répertoire class où seront placés nos fichiers de classes.
 
-A la racine, nous aurons un fichier ```header.php``` qui va contenir des fonctions et notre connexion à la base puis un ```index.php```
+À la racine, nous aurons un fichier ```header.php``` qui va contenir des fonctions et notre connexion à la base puis un ```index.php```
 
-Dans notre dossier **class** nous allons créer notre premier object qui va se nommer Character.php
+Dans notre dossier **class**, nous allons créer notre premier object qui va se nommer Character.php
 
-Cette object va représenter notre personnage avec ces différents attribut (id, name, hp, ap, password)
+Cet object va représenter notre personnage avec ses différents attributs (id, name, hp, ap, password)
 
-hp et ap seront respectivement les Point de vie et les Point d'action
+hp et ap seront respectivement les Points de vie et les Points d'action
 
-Nous crérons les getter et les setter pour accéder à ces différentes variable.
+Nous créerons les getter et les setter pour accéder à ces différentes variables.
 
 Votre object doit ressembler à ça :
 
@@ -90,7 +90,7 @@ class Character
 }
 ```
 
-Nous rajoutons une fonction hydrate qui va nous permettra de passer un tableau en parametre pour lui donner les valeurs souhaitez (l'hydrater)
+Nous rajoutons une fonction hydrate qui va nous permettre de passer un tableau en paramètre pour lui donner les valeurs souhaitées (l'hydrater)
 
 ```php
  public function hydrate(array $donnees)
@@ -107,11 +107,11 @@ Nous rajoutons une fonction hydrate qui va nous permettra de passer un tableau e
     }
 ```
 
-Par exemple si nous donnons le tableau suivant ['name' => 'Olivier', 'hp' => 100, 'ap' => 10], cette fonction va rajouter le set sur les ```key``` et ```ucfirst``` (<http://php.net/manual/fr/function.ucfirst.php>) sur la premier lettre en majuscle. 
+Par exemple, si nous donnons le tableau suivant ['name' => 'Olivier', 'hp' => 100, 'ap' => 10], cette fonction va rajouter le set sur les ```key``` et ```ucfirst``` (<http://php.net/manual/fr/function.ucfirst.php>) sur la première lettre en majuscle. 
 
 Si jamais la personne se trompe dans les ```key``` du tableau, nous allons rajouter un test avec la fonction ```method_exists``` (<http://php.net/manual/fr/function.method-exists.php>)
 
-Dans notre construct nous rajoutons l'appelle à cette fonction si jamais on lui passe un tableau de données : 
+Dans notre construct nous rajoutons l'appel à cette fonction si jamais on lui passe un tableau de données : 
 
 ```php
     public function __construct(array $arrayOfValues = null)
@@ -122,7 +122,7 @@ Dans notre construct nous rajoutons l'appelle à cette fonction si jamais on lui
     }
 ```
 
-La fonction ```__construct``` (<http://php.net/manual/fr/language.oop5.decon.php>) dans notre object permet de déclancher une action lors que nous instantion l'object par exemple : ```$character = new Character();```
+La fonction ```__construct``` (<http://php.net/manual/fr/language.oop5.decon.php>) dans notre object permet de déclancher une action lors que nous instantions l'object par exemple : ```$character = new Character();```
 
 Ici, j'ai deux possibilités : soit je lui passe un tableau, soit je ne lui passe rien.
 
@@ -130,13 +130,13 @@ Si jamais je lui passe un tableau je vais lancer la fonction hydrate dessus.
 
 Exemple : ```$character = new Character(['name' => 'Olivier', 'hp' => '100', 'ap' => '10']);```
 
-Mon object ```$character``` a maintenant les champs name, hp, ap d'hydrater, en faisant un echo ```$character->getName()```, j'obtiens le resultat Olivier
+Mon object ```$character``` a maintenant les champs name, hp, ap d'hydratés, en faisant un echo ```$character->getName()```, j'obtiens le resultat Olivier
 
-Voila pour notre permier object.
+Voilà pour notre permier object.
 
 Passons à nos deux autres fichiers qui sont vides : ```index.php``` et ```header.php```
 
-Pour avoir accès à notre object Character, il faut que je l'intégre dans notre header avec la fonction ```require``` (<http://php.net/manual/fr/function.require.php>) pour pouvoir l'utiliser plus tard.
+Pour avoir accès à notre object Character, il faut que je l'intègre dans notre header avec la fonction ```require``` (<http://php.net/manual/fr/function.require.php>) pour pouvoir l'utiliser plus tard.
 
 Exemple :
 
@@ -165,7 +165,7 @@ function loadClass($classname)
 spl_autoload_register('loadClass');
 ```
 
-Ici nous allons le placer dans header pour detecter notre appel à une classe dans notre fichier, php ira la chercher en automatique.
+Ici nous allons le placer dans header pour détecter notre appel à une classe dans notre fichier, php ira la chercher en automatique.
 
 Super ! On va tester directement ça dans notre index.php
 
@@ -179,7 +179,7 @@ echo "Le nom du joueur est " . $character->getName() . " et à " . $character->g
 ?>
 ```
 
-Maintenant il faut pouvoir rentrer ce personnage en base de donnée avec PDO
+Maintenant il faut pouvoir rentrer ce personnage en base de données avec PDO
 
 On va rajouter la connexion dans notre header.php
 
@@ -190,9 +190,9 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 Pensez à configurer votre dbname, le user et le mot de passe de votre environnement de dev.
 
-On check vite fait sur la page d'index (en lancant votre navigateur tout simplement) si ça ne me fait pas de message d'erreur.
+On check vite fait sur la page d'index (en lancant votre navigateur tout simplement) si ça ne fait pas de message d'erreur.
 
-Une fois cette vérification effectué, nous allons faire un formulaire d'inscription pour créer nos personnages.
+Une fois cette vérification effectuée, nous allons faire un formulaire d'inscription pour créer nos personnages.
 
 On va créer la table : characters
 
@@ -202,9 +202,9 @@ Dedans nous allons mettre les champs id, name, password, hp, ap.
 
 Configurer bien votre ```id``` en auto incrément, name et password seront en varchar puis hp et ap en int.
 
-on va créer une page inscription.php.
+On va créer une page inscription.php.
 
-Première chose à faire vous aller mettre le require de header :
+Première chose à faire vous allez mettre le require du header :
 
 ```php
 <?php
@@ -242,15 +242,15 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
 }
 ```
 
-Ici nous insérons en base notre nouveau personnage. Normalement vous devais retrouver avec une nouvelle insertion dans votre table.
+Ici nous insérons en base notre nouveau personnage. Normalement vous devez retrouver une nouvelle insertion dans votre table.
 
-C'est bien mais qu'est ce qu'il va arriver si on a deux fois le même nom ? Si on veut inserer un personnage ailleurs ?
+C'est bien mais qu'est ce qu'il va arriver si on a deux fois le même nom ? Si on veut insérer un personnage ailleurs ?
 
 Vous avez compris, nous allons créer une classe qui va gérer tout ça.
 
 Nous créons un nouveau fichier dans le dossier class qui va s'appeler ```CharacterRepository.php```
 
-Ici nous allons gérer tout ce qui fait le liens entre la base de données et l'object Character
+Ici nous allons gérer tout ce qui fait le lien entre la base de données et l'object Character
 
 ```php
 <?php
@@ -291,7 +291,7 @@ public function add(Character $character)
     
 ```
 
-Le ```$this->base``` conrrespond a notre object PDO passer dans le ```__construct``` pour rappel.
+Le ```$this->base``` conrrespond a notre object PDO passé dans le ```__construct``` pour rappel.
 
 Nous faisons exactement la même chose que dans le traitement des données que nous avons fait dans inscription.php SAUF que cette fois on utilise les bindValue plutôt que de passer un tableau dans execute, c'est plus propre.
 
@@ -313,7 +313,7 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
     $characterRepository->add($character);
 }
 ```
-PS : Ici, il va avoir une erreur, elle vient de la déclaration PDO plus haut, qui n'est pas nommé de la même manière.
+PS : Ici, il va y avoir une erreur, elle vient de la déclaration PDO plus haut, qui n'est pas nommé de la même manière.
 
 La différence avec notre précédant traitement est que nous instantions un object Character. Nous l'hydratons avec les données du formulaire.
 Puis nous le rajoutons en base avec la fonction ```add``` de notre CharacterRepository.
@@ -334,7 +334,7 @@ Rien de plus simple, nous allons créer une nouvelle fonction dans notre reposit
     
 ```
 
-Ici nous allons coté en bdd voir si il y des personnages avec le même nom.
+Ici nous allons coté bdd voir si il y des personnages avec le même nom.
 
 Le type boolean (<http://php.net/manual/fr/language.types.boolean.php>) va nous permettre de que notre fonction renvoie true ou false suivant si il y a un résultat dans la base ou non.
 
